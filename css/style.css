@@ -2,7 +2,7 @@
 @import url('reset.css');
 
 .container {
-    max-width: 640px;
+    max-width: 576px;
     margin: 0 auto;
 }
 
@@ -10,8 +10,8 @@
     display: grid;
     grid-template-columns: repeat(8, 70px);
     grid-auto-rows: 70px;
-    margin-top: 20px;
-    gap: 10px;
+    margin-top: calc(50vh - (576px / 2));
+    gap: 2px;
 }
 
 .game__cell {
@@ -20,4 +20,6 @@
 
 .mine {
     width: 100%;
+    position: relative;
+    z-index: -1;
 }

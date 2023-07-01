@@ -15,3 +15,15 @@ for (let i = 0; i < 10; i++) {
         cells[index].append(bomb);
     }
 }
+
+document.querySelector('.game').addEventListener('click', (e) => {
+    const target = e.target;
+
+    if (target.nodeName != 'LI') return false;
+
+    if (target.children.length != 0) {
+        target.firstElementChild.style.zIndex = '1';
+    }
+
+    target.style.background = '#b4b4b4';
+})
