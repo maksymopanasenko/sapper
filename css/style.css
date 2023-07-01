@@ -1,6 +1,10 @@
 @import url('reset.css');
 @import url('reset.css');
 
+body {
+    user-select: none;
+}
+
 .container {
     max-width: 576px;
     margin: 0 auto;
@@ -16,9 +20,13 @@
 
 .game__cell {
     background: #5d9130;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mine {
+    display: flex;
     width: 100%;
     position: relative;
     z-index: -1;
