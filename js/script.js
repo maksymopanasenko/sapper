@@ -1,8 +1,15 @@
 const cells = document.querySelectorAll('.game__cell');
 
 const dublicates = [];
-
 const check = [];
+const empty = [];
+const nextEmpty = [];
+const neighbourDigits = [];
+
+let primaryElems;
+let nextElems;
+let primaryUniqueElems;
+let nextUniqueElems;
 
 for (let i = 0; i < 10; i++) {
     const index = Math.floor(Math.random() * 64);
@@ -15,7 +22,7 @@ for (let i = 0; i < 10; i++) {
         bomb.classList.add('mine');
         bomb.setAttribute('src', 'img/mine.png');
         cells[index].append(bomb);
-        setBombNumber(cells[index]);
+        handleBombNumber(cells[index], check);
     }
 }
 
@@ -26,25 +33,77 @@ document.querySelector('.game').addEventListener('click', (e) => {
 
     if (target.children.length != 0) {
         target.firstElementChild.style.zIndex = '1';
+        target.style.background = 'red';
+    } else {
+        target.style.background = '#b4b4b4';
+        target.style.color = 'black';
     }
 
-    target.style.background = '#b4b4b4';
+    if (target.innerHTML == '') {
+        getEmpty(target, empty);
+    }
+
+    function getEmpty(elem, array) {
+        const x = elem.dataset.x;
+        const y = elem.dataset.y;
+
+        const num_1 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
+        const num_2 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
+        const num_3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
+        const num_4 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
+    
+        array.push(elem, ...num_1, ...num_2, ...num_3, ...num_4);
+
+        if (array == empty) {
+            primaryElems = array.filter(item => item.innerHTML == '');
+        
+            primaryUniqueElems = new Set(primaryElems);
+        } else {
+            nextElems = array.filter(item => item.innerHTML == '');
+            nextUniqueElems = new Set(nextElems);
+        }
+    }
+
+    if (primaryUniqueElems) {
+        primaryUniqueElems.forEach(item => {
+            getEmpty(item, nextEmpty);
+        });
+    }
+
+    for (let i =0; i <= nextUniqueElems?.size; i++) {
+        nextUniqueElems.forEach(item => {
+            getEmpty(item, nextEmpty);
+        });
+    }
+
+    if (nextUniqueElems) {
+        nextUniqueElems.forEach(item => {
+            handleBombNumber(item, neighbourDigits);
+    
+            neighbourDigits.forEach(item => item.innerText ? item.style.cssText = 'background: #b4b4b4; color: black' : null);
+            neighbourDigits.length = 0;
+            item.style.background = '#b4b4b4';
+        });
+        
+        primaryUniqueElems.clear();
+        nextUniqueElems.clear();
+    }
 });
 
 
-function setBombNumber(bomb) {
+function handleBombNumber(bomb, array) {
     const x = bomb.dataset.x;
     const y = bomb.dataset.y;
-    const num_1 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y-1)
-    const num_2 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1)
-    const num_3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y-1)
-    const num_4 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y)
-    const num_5 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y)
-    const num_6 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == +y+1)
-    const num_7 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1)
-    const num_8 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == +y+1)
+    const num_1 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y-1);
+    const num_2 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
+    const num_3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y-1);
+    const num_4 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
+    const num_5 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
+    const num_6 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == +y+1);
+    const num_7 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
+    const num_8 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == +y+1);
 
-    check.push(...num_1, ...num_2, ...num_3, ...num_4, ...num_5, ...num_6, ...num_7, ...num_8);
+    array.push(...num_1, ...num_2, ...num_3, ...num_4, ...num_5, ...num_6, ...num_7, ...num_8);
 }
 
 
