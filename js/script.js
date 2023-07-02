@@ -31,6 +31,8 @@ document.querySelector('.game').addEventListener('click', (e) => {
 
     if (target.nodeName != 'LI') return false;
 
+    target.classList.remove('plug');
+
     if (target.children.length != 0) {
         target.firstElementChild.style.zIndex = '1';
         target.style.background = 'red';
@@ -80,13 +82,31 @@ document.querySelector('.game').addEventListener('click', (e) => {
         nextUniqueElems.forEach(item => {
             handleBombNumber(item, neighbourDigits);
     
-            neighbourDigits.forEach(item => item.innerText ? item.style.cssText = 'background: #b4b4b4; color: black' : null);
+            neighbourDigits.forEach(item => {
+                if (item.innerText) {
+                    item.style.cssText = 'background: #b4b4b4; color: black';
+                    item.classList.remove('plug');
+                }
+            });
             neighbourDigits.length = 0;
             item.style.background = '#b4b4b4';
+            item.classList.remove('plug');
         });
         
         primaryUniqueElems.clear();
         nextUniqueElems.clear();
+    }
+
+    const all = document.querySelectorAll('.plug');
+    console.log(all.length);
+    if (all.length == 10) {
+        all.forEach(item => item.style.zIndex = '1');
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+        modal.innerHTML = `
+            <p class="modal__text">You won!</p>
+        `;
+        document.querySelector('body').append(modal);
     }
 });
 
