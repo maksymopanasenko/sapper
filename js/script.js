@@ -1,4 +1,5 @@
 const cells = document.querySelectorAll('.game__cell');
+const modal = document.getElementById('modal');
 
 const dublicates = [];
 const check = [];
@@ -34,8 +35,12 @@ document.querySelector('.game').addEventListener('click', (e) => {
     target.classList.remove('plug');
 
     if (target.children.length != 0) {
-        target.firstElementChild.style.zIndex = '1';
-        target.style.background = 'red';
+        const mines = document.querySelectorAll('.mine');
+        mines.forEach(mine => mine.style.cssText = 'background: red; z-Index: 1');
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <p class="modal__text lose">You lost!</p>
+        `;
     } else {
         target.style.background = '#b4b4b4';
         target.style.color = 'black';
@@ -101,12 +106,10 @@ document.querySelector('.game').addEventListener('click', (e) => {
     console.log(all.length);
     if (all.length == 10) {
         all.forEach(item => item.style.zIndex = '1');
-        const modal = document.createElement('div');
-        modal.classList.add('modal');
+        modal.style.display = 'flex';
         modal.innerHTML = `
             <p class="modal__text">You won!</p>
         `;
-        document.querySelector('body').append(modal);
     }
 });
 
