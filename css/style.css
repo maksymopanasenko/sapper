@@ -26,6 +26,7 @@ body {
     font-size: 18px;
     font-weight: 700;
     color: #5d9130;
+    position: relative;
 }
 
 .mine {
@@ -60,4 +61,14 @@ body {
 
 .modal__text.lose {
     background: #f11111;
+}
+
+.flag {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    width: 100%;
 }

@@ -1,3 +1,4 @@
+const table = document.querySelector('.game');
 const cells = document.querySelectorAll('.game__cell');
 const modal = document.getElementById('modal');
 
@@ -27,21 +28,21 @@ for (let i = 0; i < 10; i++) {
     }
 }
 
-document.querySelector('.game').addEventListener('click', (e) => {
+table.addEventListener('click', (e) => {
     const target = e.target;
 
     if (target.nodeName != 'LI') return false;
 
-    target.classList.remove('plug');
-
     if (target.children.length != 0) {
         const mines = document.querySelectorAll('.mine');
         mines.forEach(mine => mine.style.cssText = 'background: red; z-Index: 1');
+        document.querySelectorAll('.flag').forEach(flag => flag.remove());
         modal.style.display = 'flex';
         modal.innerHTML = `
             <p class="modal__text lose">You lost!</p>
         `;
     } else {
+        target.classList.remove('plug');
         target.style.background = '#b4b4b4';
         target.style.color = 'black';
     }
@@ -85,10 +86,11 @@ document.querySelector('.game').addEventListener('click', (e) => {
 
     if (nextUniqueElems) {
         nextUniqueElems.forEach(item => {
+            
             handleBombNumber(item, neighbourDigits);
     
             neighbourDigits.forEach(item => {
-                if (item.innerText) {
+                if (item.innerText && item.innerHTML.length == 1) {
                     item.style.cssText = 'background: #b4b4b4; color: black';
                     item.classList.remove('plug');
                 }
@@ -102,17 +104,36 @@ document.querySelector('.game').addEventListener('click', (e) => {
         nextUniqueElems.clear();
     }
 
-    const all = document.querySelectorAll('.plug');
-    console.log(all.length);
-    if (all.length == 10) {
-        all.forEach(item => item.style.zIndex = '1');
+    const allCells = document.querySelectorAll('.plug');
+    
+    if (allCells.length == 10) {
+        allCells.forEach(item => item.style.zIndex = '1');
         modal.style.display = 'flex';
         modal.innerHTML = `
             <p class="modal__text">You won!</p>
         `;
+        document.querySelectorAll('.flag').forEach(flag => flag.remove());
     }
 });
 
+table.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+
+    const target = e.target;
+    
+    if (target.nodeName == 'UL') return false;
+
+    if (target.classList.contains('flag')) target.remove();
+
+    if (!target.classList.contains('plug')) return false;
+
+    const flag = document.createElement('img');
+    flag.setAttribute('src', 'img/flag.png');
+    flag.setAttribute('alt', 'flag');
+    flag.classList.add('flag');
+
+    target.append(flag);
+});
 
 function handleBombNumber(bomb, array) {
     const x = bomb.dataset.x;
@@ -128,7 +149,6 @@ function handleBombNumber(bomb, array) {
 
     array.push(...num_1, ...num_2, ...num_3, ...num_4, ...num_5, ...num_6, ...num_7, ...num_8);
 }
-
 
 check.forEach(item => {
     const index = Array.from(cells).indexOf(item);
