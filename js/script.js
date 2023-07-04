@@ -1,6 +1,7 @@
 const table = document.querySelector('.game__table');
 const cells = document.querySelectorAll('.game__cell');
 const modal = document.getElementById('modal');
+const restartBtn = document.querySelector('.restart');
 
 const dublicates = [];
 const check = [];
@@ -13,20 +14,8 @@ let nextElems;
 let primaryUniqueElems;
 let nextUniqueElems;
 
-for (let i = 0; i < 10; i++) {
-    const index = Math.floor(Math.random() * 64);
-    const res = dublicates.find(item => item == index);
-    if (res) {
-        i--;
-    } else {
-        dublicates.push(index);
-        const bomb = document.createElement('img');
-        bomb.classList.add('mine');
-        bomb.setAttribute('src', 'img/mine.png');
-        cells[index].append(bomb);
-        handleBombNumber(cells[index], check);
-    }
-}
+generateMines();
+setBombNumbers();
 
 table.addEventListener('click', (e) => {
     const target = e.target;
@@ -144,6 +133,41 @@ table.addEventListener('contextmenu', (e) => {
     flagCounter.innerText = +flagCounter.innerText + 1;
 });
 
+restartBtn.addEventListener('click', () => {
+    dublicates.length = 0;
+    check.length = 0;
+    empty.length = 0;
+    nextEmpty.length = 0;
+    neighbourDigits.length = 0;
+
+    document.querySelector('.flags').innerText = 0;
+
+    cells.forEach(cell => {
+        cell.classList.add('plug');
+        cell.style.cssText = 'background: #5d9130; color: #5d9130';
+        cell.innerHTML = '';
+    });    
+    generateMines();
+    setBombNumbers();
+});
+
+function generateMines() {
+    for (let i = 0; i < 10; i++) {
+        const index = Math.floor(Math.random() * 64);
+        const res = dublicates.find(item => item == index);
+        if (res) {
+            i--;
+        } else {
+            dublicates.push(index);
+            const bomb = document.createElement('img');
+            bomb.classList.add('mine');
+            bomb.setAttribute('src', 'img/mine.png');
+            cells[index].append(bomb);
+            handleBombNumber(cells[index], check);
+        }
+    }
+}
+
 function handleBombNumber(bomb, array) {
     const x = bomb.dataset.x;
     const y = bomb.dataset.y;
@@ -159,9 +183,11 @@ function handleBombNumber(bomb, array) {
     array.push(...num_1, ...num_2, ...num_3, ...num_4, ...num_5, ...num_6, ...num_7, ...num_8);
 }
 
-check.forEach(item => {
-    const index = Array.from(cells).indexOf(item);
-    const res = check.filter(it => it == item);
-
-    if (!dublicates.includes(index)) item.innerText = res.length;
-});
+function setBombNumbers() {
+    check.forEach(item => {
+        const index = Array.from(cells).indexOf(item);
+        const res = check.filter(it => it == item);
+    
+        if (!dublicates.includes(index)) item.innerText = res.length;
+    });
+}
