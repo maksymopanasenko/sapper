@@ -1,4 +1,4 @@
-const table = document.querySelector('.game');
+const table = document.querySelector('.game__table');
 const cells = document.querySelectorAll('.game__cell');
 const modal = document.getElementById('modal');
 
@@ -32,6 +32,8 @@ table.addEventListener('click', (e) => {
     const target = e.target;
 
     if (target.nodeName != 'LI') return false;
+
+    document.querySelector('.restart').style.display = 'block';
 
     if (target.children.length != 0) {
         const mines = document.querySelectorAll('.mine');
@@ -120,12 +122,18 @@ table.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 
     const target = e.target;
+    const flagCounter = document.querySelector('.flags');
     
     if (target.nodeName == 'UL') return false;
 
-    if (target.classList.contains('flag')) target.remove();
+    if (target.classList.contains('flag')) {
+        target.remove();
+        flagCounter.innerText = flagCounter.innerText - 1;
+    };
 
     if (!target.classList.contains('plug')) return false;
+
+    if (flagCounter.innerText == 10) return false;
 
     const flag = document.createElement('img');
     flag.setAttribute('src', 'img/flag.png');
@@ -133,6 +141,7 @@ table.addEventListener('contextmenu', (e) => {
     flag.classList.add('flag');
 
     target.append(flag);
+    flagCounter.innerText = +flagCounter.innerText + 1;
 });
 
 function handleBombNumber(bomb, array) {
