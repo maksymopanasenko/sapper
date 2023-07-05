@@ -2,6 +2,7 @@ const table = document.querySelector('.game__table');
 const cells = document.querySelectorAll('.game__cell');
 const modal = document.getElementById('modal');
 const restartBtn = document.querySelector('.restart');
+const modalBtn = document.querySelector('.modal__btn');
 
 const dublicates = [];
 const check = [];
@@ -29,9 +30,8 @@ table.addEventListener('click', (e) => {
         mines.forEach(mine => mine.style.cssText = 'background: red; z-Index: 1');
         document.querySelectorAll('.flag').forEach(flag => flag.remove());
         modal.style.display = 'flex';
-        modal.innerHTML = `
-            <p class="modal__text lose">You lost!</p>
-        `;
+
+        changeContent('You lost!', 'lose');
     } else {
         target.classList.remove('plug');
         target.style.background = '#b4b4b4';
@@ -46,12 +46,12 @@ table.addEventListener('click', (e) => {
         const x = elem.dataset.x;
         const y = elem.dataset.y;
 
-        const num_1 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
-        const num_2 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
-        const num_3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
-        const num_4 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
+        const num1 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
+        const num2 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
+        const num3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
+        const num4 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
     
-        array.push(elem, ...num_1, ...num_2, ...num_3, ...num_4);
+        array.push(elem, ...num1, ...num2, ...num3, ...num4);
 
         if (array == empty) {
             primaryElems = array.filter(item => item.innerHTML == '');
@@ -69,7 +69,7 @@ table.addEventListener('click', (e) => {
         });
     }
 
-    for (let i =0; i <= nextUniqueElems?.size; i++) {
+    for (let i = 0; i <= nextUniqueElems?.size; i++) {
         nextUniqueElems.forEach(item => {
             getEmpty(item, nextEmpty);
         });
@@ -100,9 +100,9 @@ table.addEventListener('click', (e) => {
     if (allCells.length == 10) {
         allCells.forEach(item => item.style.zIndex = '1');
         modal.style.display = 'flex';
-        modal.innerHTML = `
-            <p class="modal__text">You won!</p>
-        `;
+
+        changeContent('You won!')
+
         document.querySelectorAll('.flag').forEach(flag => flag.remove());
     }
 });
@@ -133,22 +133,11 @@ table.addEventListener('contextmenu', (e) => {
     flagCounter.innerText = +flagCounter.innerText + 1;
 });
 
-restartBtn.addEventListener('click', () => {
-    dublicates.length = 0;
-    check.length = 0;
-    empty.length = 0;
-    nextEmpty.length = 0;
-    neighbourDigits.length = 0;
+restartBtn.addEventListener('click', restartGame);
 
-    document.querySelector('.flags').innerText = 0;
-
-    cells.forEach(cell => {
-        cell.classList.add('plug');
-        cell.style.cssText = 'background: #5d9130; color: #5d9130';
-        cell.innerHTML = '';
-    });    
-    generateMines();
-    setBombNumbers();
+modalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    restartGame();
 });
 
 function generateMines() {
@@ -171,16 +160,16 @@ function generateMines() {
 function handleBombNumber(bomb, array) {
     const x = bomb.dataset.x;
     const y = bomb.dataset.y;
-    const num_1 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y-1);
-    const num_2 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
-    const num_3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y-1);
-    const num_4 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
-    const num_5 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
-    const num_6 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == +y+1);
-    const num_7 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
-    const num_8 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == +y+1);
+    const num1 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y-1);
+    const num2 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
+    const num3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y-1);
+    const num4 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
+    const num5 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
+    const num6 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == +y+1);
+    const num7 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
+    const num8 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == +y+1);
 
-    array.push(...num_1, ...num_2, ...num_3, ...num_4, ...num_5, ...num_6, ...num_7, ...num_8);
+    array.push(...num1, ...num2, ...num3, ...num4, ...num5, ...num6, ...num7, ...num8);
 }
 
 function setBombNumbers() {
@@ -190,4 +179,30 @@ function setBombNumbers() {
     
         if (!dublicates.includes(index)) item.innerText = res.length;
     });
+}
+
+function restartGame() {
+    dublicates.length = 0;
+    check.length = 0;
+    empty.length = 0;
+    nextEmpty.length = 0;
+    neighbourDigits.length = 0;
+
+    document.querySelector('.flags').innerText = 0;
+
+    cells.forEach(cell => {
+        cell.classList.add('plug');
+        cell.style.cssText = 'background: #5d9130; color: #5d9130';
+        cell.innerHTML = '';
+    });    
+    generateMines();
+    setBombNumbers();
+}
+
+function changeContent(status, clazz) {
+    const content = document.querySelector('.modal__content');
+    const text = document.querySelector('.modal__text');
+
+    text.innerText = status;
+    clazz ? content.classList.add(clazz) : content.classList.remove('lose');
 }
