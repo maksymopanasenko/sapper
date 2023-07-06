@@ -9,6 +9,7 @@ const check = [];
 const empty = [];
 const nextEmpty = [];
 const neighbourDigits = [];
+const flagsArray = [];
 
 let primaryElems;
 let nextElems;
@@ -131,6 +132,38 @@ table.addEventListener('contextmenu', (e) => {
 
     target.append(flag);
     flagCounter.innerText = +flagCounter.innerText + 1;
+});
+
+table.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+
+    const target = e.target;
+    
+    if (target.nodeName == 'UL') return false;
+
+    if (target.innerText) {
+        handleBombNumber(target, flagsArray);
+        const flags = flagsArray.filter(item => item.lastElementChild?.classList.contains('flag'));
+        if (target.innerText == flags.length) {
+            const nonFlags = flagsArray.filter(item => !item.lastElementChild?.classList.contains('flag'));
+            nonFlags.forEach(item => {
+                if (item.children.length != 0) {
+                    const mines = document.querySelectorAll('.mine');
+                    mines.forEach(mine => mine.style.cssText = 'background: red; z-Index: 1');
+                    document.querySelectorAll('.flag').forEach(flag => flag.remove());
+                    modal.style.display = 'flex';
+            
+                    changeContent('You lost!', 'lose');
+                } else {
+                    item.classList.remove('plug');
+                    item.style.background = '#b4b4b4';
+                    item.style.color = 'black';
+                }
+            });
+        }
+
+        flagsArray.length = 0;
+    };
 });
 
 restartBtn.addEventListener('click', restartGame);
