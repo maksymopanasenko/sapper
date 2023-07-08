@@ -1,4 +1,8 @@
 const table = document.querySelector('.game__table');
+let cellsNumber = 24;
+let bombNumber = Math.floor(cellsNumber / 6);
+buildTable(cellsNumber);
+
 const cells = document.querySelectorAll('.game__cell');
 const modal = document.getElementById('modal');
 const restartBtn = document.querySelector('.restart');
@@ -16,7 +20,9 @@ let nextElems;
 let primaryUniqueElems;
 let nextUniqueElems;
 
-generateMines();
+
+
+generateMines(cellsNumber);
 setBombNumbers();
 
 table.addEventListener('click', (e) => {
@@ -97,8 +103,7 @@ table.addEventListener('click', (e) => {
     }
 
     const allCells = document.querySelectorAll('.plug');
-    
-    if (allCells.length == 10) {
+    if (allCells.length == bombNumber) {
         allCells.forEach(item => item.style.zIndex = '1');
         modal.style.display = 'flex';
 
@@ -123,7 +128,7 @@ table.addEventListener('contextmenu', (e) => {
 
     if (!target.classList.contains('plug')) return false;
 
-    if (flagCounter.innerText == 10) return false;
+    if (flagCounter.innerText == cellsNumber) return false;
 
     const flag = document.createElement('img');
     flag.setAttribute('src', 'img/flag.png');
@@ -173,9 +178,9 @@ modalBtn.addEventListener('click', () => {
     restartGame();
 });
 
-function generateMines() {
-    for (let i = 0; i < 10; i++) {
-        const index = Math.floor(Math.random() * 64);
+function generateMines(cellsNumber) {
+    for (let i = 0; i < bombNumber; i++) {
+        const index = Math.floor(Math.random() * cellsNumber);
         const res = dublicates.find(item => item == index);
         if (res) {
             i--;
@@ -227,8 +232,10 @@ function restartGame() {
         cell.classList.add('plug');
         cell.style.cssText = 'background: #5d9130; color: #5d9130';
         cell.innerHTML = '';
-    });    
-    generateMines();
+    });
+    
+    restartBtn.style.display = 'none';
+    generateMines(cellsNumber);
     setBombNumbers();
 }
 
@@ -238,4 +245,37 @@ function changeContent(status, clazz) {
 
     text.innerText = status;
     clazz ? content.classList.add(clazz) : content.classList.remove('lose');
+}
+
+function buildTable(cellsNumber) {
+    document.querySelector('.mines').innerText = bombNumber;
+    let x = 0;
+    let y = 0;
+
+    for (let i = 0; i < cellsNumber; i++) {
+        const newCell = document.createElement('li');
+        newCell.classList.add('game__cell', 'plug');
+
+        switch (i) {
+            case 8:
+            case 16:
+            case 24:
+            case 32:
+            case 40:
+            case 56:
+            case 64:
+            case 72:
+            case 80:
+            case 88:
+            case 96:
+                x = 0;
+                y++;
+                break;
+        }
+        newCell.setAttribute('data-x', `${x}`);
+        newCell.setAttribute('data-y', `${y}`);
+
+        table.append(newCell);
+        x++;
+    }
 }
