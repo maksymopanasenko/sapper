@@ -9,24 +9,47 @@
 </head>
 <body>
     <main>
-        <div class="container">
-            <div class="game">
-                <div class="game__panel">
-                    <p class="game__counter">
-                        Mines: <span class="flags">0</span> / <span class="mines"></span>
-                    </p>
-                    <button class="restart">Restart</button>
+        <div class="start">
+            <div class="container">
+                <div class="start__content">
+                    <h2 class="start__title">Choose the board size</h2>
+                    <input type="range" id="range" name="range" min="24" max="80" step="8" list="markers" value="24"/>
+        
+                    <datalist id="markers">
+                      <option value="24" label="24"></option>
+                      <option value="32" label="32"></option>
+                      <option value="40" label="40"></option>
+                      <option value="48" label="48"></option>
+                      <option value="56" label="56"></option>
+                      <option value="64" label="64"></option>
+                      <option value="72" label="72"></option>
+                      <option value="80" label="80"></option>
+                    </datalist>
+                    <button class="start__btn">Start</button>
                 </div>
-                <ul class="game__table"></ul>
             </div>
         </div>
-    </main>
+        <section class="game">
+            <div class="container">
+                <div class="game__body">
+                    <div class="game__panel">
+                        <p class="game__counter">
+                            Mines: <span class="flags">0</span> / <span class="mines"></span>
+                        </p>
+                        <button class="restart">Restart</button>
+                    </div>
+                    <ul class="game__table"></ul>
+                </div>
+            </div>
+        </section>
+        
     <div id="modal" class="modal">
         <div class="modal__content">
             <p class="modal__text">You won!</p>
             <button class="modal__btn">Play again</button>
         </div>
     </div>
+    </main>
     <script src="js/script.js"></script>
 </body>
 </html>

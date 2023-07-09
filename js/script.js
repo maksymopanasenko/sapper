@@ -1,9 +1,8 @@
-const table = document.querySelector('.game__table');
 let cellsNumber = 24;
 let bombNumber = Math.floor(cellsNumber / 6);
-buildTable(cellsNumber);
+let cells;
 
-const cells = document.querySelectorAll('.game__cell');
+const table = document.querySelector('.game__table');
 const modal = document.getElementById('modal');
 const restartBtn = document.querySelector('.restart');
 const modalBtn = document.querySelector('.modal__btn');
@@ -21,9 +20,6 @@ let primaryUniqueElems;
 let nextUniqueElems;
 
 
-
-generateMines(cellsNumber);
-setBombNumbers();
 
 table.addEventListener('click', (e) => {
     const target = e.target;
@@ -173,6 +169,21 @@ table.addEventListener('dblclick', (e) => {
 
 restartBtn.addEventListener('click', restartGame);
 
+range.addEventListener('input', (e) => {
+    cellsNumber = e.target.value;
+    bombNumber = Math.floor(cellsNumber / 6);
+});
+
+document.querySelector('.start__btn').addEventListener('click', () => {
+    document.querySelector('.start').style.display = 'none';
+    document.querySelector('.game__panel').style.display = 'flex';
+    buildTable(cellsNumber);
+    
+    cells = document.querySelectorAll('.game__cell');
+    generateMines(cellsNumber);
+    setBombNumbers();
+});
+
 modalBtn.addEventListener('click', () => {
     modal.style.display = 'none';
     restartGame();
@@ -182,7 +193,7 @@ function generateMines(cellsNumber) {
     for (let i = 0; i < bombNumber; i++) {
         const index = Math.floor(Math.random() * cellsNumber);
         const res = dublicates.find(item => item == index);
-        if (res) {
+        if (res >= 0) {
             i--;
         } else {
             dublicates.push(index);
@@ -262,12 +273,11 @@ function buildTable(cellsNumber) {
             case 24:
             case 32:
             case 40:
+            case 48:
             case 56:
             case 64:
             case 72:
             case 80:
-            case 88:
-            case 96:
                 x = 0;
                 y++;
                 break;

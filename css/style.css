@@ -10,7 +10,7 @@ body {
     margin: 0 auto;
 }
 
-.game {
+.game__body {
     margin-top: calc(50vh - (622px / 2));
 }
 
@@ -22,7 +22,7 @@ body {
 .game__panel {
     height: 48px;
     padding: 10px 30px;
-    display: flex;
+    display: none;
     justify-content: space-between;
     align-items: center;
 }
@@ -60,7 +60,7 @@ body {
 }
 
 .modal {
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
@@ -69,6 +69,7 @@ body {
     justify-content: center;
     align-items: center;
     background: #00000092;
+    z-index: 2;
 }
 
 .modal__content {
@@ -76,7 +77,6 @@ body {
     padding: 20px;
     border: 3px solid black;
     width: 300px;
-    z-index: 2;
     text-align: center;
 }
 
@@ -108,3 +108,43 @@ body {
     z-index: 3;
     width: 100%;
 }
+
+.start {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.start__title {
+    margin-bottom: 40px;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+.start__btn {
+    margin-top: 20px;
+    padding: 10px 30px;
+    background: #98c70d;
+    border-radius: 6px;
+    font-weight: 700;
+    box-shadow: 0 2px 4px black;
+}
+
+datalist {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    writing-mode: vertical-lr;
+    width: 100%;
+}
+
+option {
+    padding: 0;
+    transform: rotate(-90deg);
+    font-size: 18px;
+}
+
+#range {
+    width: 100%;
+    margin: 0;
+}
+  
