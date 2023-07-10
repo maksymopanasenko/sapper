@@ -20,18 +20,10 @@ body {
 }
 
 .game__panel {
-    height: 48px;
-    padding: 10px 30px;
+    padding: 10px 5px 20px 30px;
     display: none;
     justify-content: space-between;
     align-items: center;
-}
-
-.restart {
-    display: none;
-    background: #98c70d;
-    padding: 5px 10px;
-    border: 1px solid black;
 }
 
 .game__table {
@@ -50,6 +42,15 @@ body {
     font-weight: 700;
     color: #5d9130;
     position: relative;
+}
+
+.game__btns {
+    display: flex;
+}
+
+.restart {
+    display: none;
+    margin-right: 7px;
 }
 
 .mine {
@@ -93,6 +94,7 @@ body {
     border-radius: 5px;
     padding: 5px 10px;
     border: 1px solid black;
+    margin: 0 4px;
 }
 
 .modal__content.lose {
@@ -120,8 +122,8 @@ body {
     text-transform: uppercase;
 }
 
-.start__btn {
-    margin-top: 20px;
+.start__btn,
+.panel__btn {
     padding: 10px 30px;
     background: #98c70d;
     border-radius: 6px;
@@ -135,6 +137,7 @@ datalist {
     justify-content: space-between;
     writing-mode: vertical-lr;
     width: 100%;
+    margin-bottom: 40px;
 }
 
 option {

@@ -36,7 +36,10 @@
                         <p class="game__counter">
                             Mines: <span class="flags">0</span> / <span class="mines"></span>
                         </p>
-                        <button class="restart">Restart</button>
+                        <div class="game__btns">
+                            <button class="panel__btn restart">Restart</button>
+                            <button class="panel__btn menu__btn">Back to menu</button>
+                        </div>
                     </div>
                     <ul class="game__table"></ul>
                 </div>
@@ -47,6 +50,7 @@
         <div class="modal__content">
             <p class="modal__text">You won!</p>
             <button class="modal__btn">Play again</button>
+            <button class="modal__btn modal__btn_menu">Back to menu</button>
         </div>
     </div>
     </main>

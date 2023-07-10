@@ -5,7 +5,7 @@ let cells;
 const table = document.querySelector('.game__table');
 const modal = document.getElementById('modal');
 const restartBtn = document.querySelector('.restart');
-const modalBtn = document.querySelector('.modal__btn');
+const flagCounter = document.querySelector('.flags');
 
 const dublicates = [];
 const check = [];
@@ -26,7 +26,7 @@ table.addEventListener('click', (e) => {
 
     if (target.nodeName != 'LI') return false;
 
-    document.querySelector('.restart').style.display = 'block';
+    restartBtn.style.display = 'block';
 
     if (target.children.length != 0) {
         const mines = document.querySelectorAll('.mine');
@@ -103,7 +103,7 @@ table.addEventListener('click', (e) => {
         allCells.forEach(item => item.style.zIndex = '1');
         modal.style.display = 'flex';
 
-        changeContent('You won!')
+        changeContent('You won!');
 
         document.querySelectorAll('.flag').forEach(flag => flag.remove());
     }
@@ -113,7 +113,6 @@ table.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 
     const target = e.target;
-    const flagCounter = document.querySelector('.flags');
     
     if (target.nodeName == 'UL') return false;
 
@@ -184,10 +183,28 @@ document.querySelector('.start__btn').addEventListener('click', () => {
     setBombNumbers();
 });
 
-modalBtn.addEventListener('click', () => {
+document.querySelector('.menu__btn').addEventListener('click', backToMenu);
+
+modal.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.nodeName != 'BUTTON') return false;
+
+    if (target.classList.contains('modal__btn_menu')) {
+        backToMenu();
+    } else {
+        restartGame();
+    }
+
     modal.style.display = 'none';
-    restartGame();
 });
+
+function backToMenu() {
+    document.querySelector('.start').style.display = 'block';
+    document.querySelector('.game__panel').style.display = 'none';
+    restartBtn.style.display = 'none';
+    table.innerHTML = '';
+    clearArrays();
+}
 
 function generateMines(cellsNumber) {
     for (let i = 0; i < bombNumber; i++) {
@@ -231,13 +248,7 @@ function setBombNumbers() {
 }
 
 function restartGame() {
-    dublicates.length = 0;
-    check.length = 0;
-    empty.length = 0;
-    nextEmpty.length = 0;
-    neighbourDigits.length = 0;
-
-    document.querySelector('.flags').innerText = 0;
+    clearArrays();
 
     cells.forEach(cell => {
         cell.classList.add('plug');
@@ -248,6 +259,15 @@ function restartGame() {
     restartBtn.style.display = 'none';
     generateMines(cellsNumber);
     setBombNumbers();
+}
+
+function clearArrays() {
+    dublicates.length = 0;
+    check.length = 0;
+    empty.length = 0;
+    nextEmpty.length = 0;
+    neighbourDigits.length = 0;
+    flagCounter.innerText = 0;
 }
 
 function changeContent(status, clazz) {
