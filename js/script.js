@@ -45,27 +45,6 @@ table.addEventListener('click', (e) => {
         getEmpty(target, empty);
     }
 
-    function getEmpty(elem, array) {
-        const x = elem.dataset.x;
-        const y = elem.dataset.y;
-
-        const num1 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == y-1);
-        const num2 = Array.from(cells).filter(item => item.dataset.x == x-1 && item.dataset.y == y);
-        const num3 = Array.from(cells).filter(item => item.dataset.x == +x+1 && item.dataset.y == y);
-        const num4 = Array.from(cells).filter(item => item.dataset.x == x && item.dataset.y == +y+1);
-    
-        array.push(elem, ...num1, ...num2, ...num3, ...num4);
-
-        if (array == empty) {
-            primaryElems = array.filter(item => item.innerHTML == '');
-        
-            primaryUniqueElems = new Set(primaryElems);
-        } else {
-            nextElems = array.filter(item => item.innerHTML == '');
-            nextUniqueElems = new Set(nextElems);
-        }
-    }
-
     if (primaryUniqueElems) {
         primaryUniqueElems.forEach(item => {
             getEmpty(item, nextEmpty);
@@ -93,9 +72,14 @@ table.addEventListener('click', (e) => {
             item.style.background = '#b4b4b4';
             item.classList.remove('plug');
         });
+        console.log(nextUniqueElems);
         
-        primaryUniqueElems.clear();
-        nextUniqueElems.clear();
+        primaryUniqueElems = null;
+        nextUniqueElems = null;
+        primaryElems = null;
+        nextElems = null;
+        empty.length = 0;
+        nextEmpty.length = 0;
     }
 
     const allCells = document.querySelectorAll('.plug');
@@ -245,6 +229,22 @@ function setBombNumbers() {
     
         if (!dublicates.includes(index)) item.innerText = res.length;
     });
+}
+
+function getEmpty(elem, array) {
+    const x = elem.dataset.x;
+    const y = elem.dataset.y;
+
+    handleBombNumber(elem, array);
+
+    if (array == empty) {
+        primaryElems = array.filter(item => item.innerHTML == '');
+    
+        primaryUniqueElems = new Set(primaryElems);
+    } else {
+        nextElems = array.filter(item => item.innerHTML == '');
+        nextUniqueElems = new Set(nextElems);
+    }
 }
 
 function restartGame() {
